@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xht.mapper.PurseMapper">
+    <select id="getPurseById" parameterType="Integer" resultType="com.xht.pojo.Purse">
+        select * from purse where uid=#{uid}
+    </select>
+
+    <select id="checkMoney" resultType="Boolean">
+        select * from purse where uid=#{uid} and money > #{money}
+    </select>
+
+    <update id="pay">
+        update purse set codes=codes-#{money} where uid=#{uid}
+    </update>
+    <update id="earn">
+        update purse set codes=codes+#{money} where uid=#{uid}
+    </update>
+
+    <select id="checkPurseExist" parameterType="Integer" resultType="Boolean">
+        select count(*) from purse where uid=#{uid}
+    </select>
+
+    <insert id="createPurse" parameterType="Integer">
+        insert into purse (uid) values (#{uid})
+    </insert>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xht.mapper.OrderMapper">
+    <resultMap id="orderMap" type="com.xht.pojo.Order">
+        <result column="id" property="id"></result>
+        <result column="name" property="wname"></result>
+        <result column="uid" property="uid"></result>
+        <result column="money" property="money"></result>
+        <result column="state" property="state"></result>
+        <result column="date" property="date"></result>
+        <result column="details" property="details"></result>
+        <result column="wid" property="wid"></result>
+    </resultMap>
+    <insert id="addOrder" >
+        insert into orders(wid,uid,money,state,details) values (#{wid},#{uid},#{money},1,0)
+    </insert>
+
+    <select id="getOrderByUid" resultMap="orderMap">
+        select o.id,o.uid,o.wid,o.money,o.state,o.date,o.details,w.name
+        from orders as o left join worker w on w.id=o.wid
+        where o.uid=#{id} and o.state &lt;4
+    </select>
+    <select id="getOrderWaitAck" resultMap="orderMap">
+        select o.id,o.uid,o.wid,o.money,o.state,o.date,o.details,w.name
+        from orders as o left join worker w on w.id=o.wid
+        where o.uid=#{id} and o.state =2
+    </select>
+    <select id="getOrderUnPay" resultMap="orderMap">
+        select o.id,o.uid,o.wid,o.money,o.state,o.date,o.details,w.name
+        from orders as o left join worker w on w.id=o.wid
+        where o.uid=#{id} and o.state = 3
+    </select>
+    <select id="getOrderHis" resultMap="orderMap">
+        select o.id,o.uid,o.wid,o.money,o.state,o.date,o.details,w.name
+        from orders as o left join worker w on w.id=o.wid
+        where o.uid=#{id} and o.state &gt;=4
+    </select>
+
+    <update id="updateOrderState">
+        update orders set state=#{state} where uid=#{uid} and wid=#{wid}
+    </update>
+</mapper>

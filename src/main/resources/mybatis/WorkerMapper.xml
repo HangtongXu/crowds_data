@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xht.mapper.WorkerMapper">
+    <select id="getWorkerByGeoHash" resultType="com.xht.pojo.Worker" parameterType="String">
+        select * from worker where geohash like concat(#{geohash},'%') and maxtask>0
+    </select>
+    <update id="updateWorkerMaxTaskById" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="worker" open="" close="" separator=";">
+            <if test="worker.id !=null and worker.maxtask !=null">
+                update worker
+                <set>
+                    maxtask=#{worker.maxtask}
+                </set>
+                where id = #{worker.id}
+            </if>
+        </foreach>
+    </update>
+    <update id="updateWorkerMaxTask" parameterType="Integer">
+        update worker set maxtask=maxtask+1 where id=#{wid}
+    </update>
+    <select id="getWorkerByUId" parameterType="Integer" resultType="com.xht.pojo.Worker">
+        select * from worker where uid=#{id};
+    </select>
+
+    <update id="updateWorkerLocation">
+        update worker set longtitude=#{lng},latitude=#{lat} where uid=#{uid}
+    </update>
+</mapper>

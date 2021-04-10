@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xht.mapper.UserMapper">
+    <select id="getUser" resultType="UserInfo" parameterType="String">
+        select * from user where username=#{username};
+    </select>
+
+    <select id="checkUsername" resultType="Integer" parameterType="String">
+        select 1 from user where username=#{username} limit 1;
+    </select>
+
+    <insert id="addUser" parameterType="UserInfo">
+        insert into user(username,password,type) value (#{username},#{password},#{type});
+    </insert>
+
+    <select id="getUserMessage" resultType="UserMessage" parameterType="Integer">
+        select * from users where uid=#{id}
+    </select>
+
+    <select id="getUserImg" parameterType="int">
+        select img from users where uid=#{uid}
+    </select>
+
+    <insert id="addUserMessage" parameterType="UserMessage">
+        insert into users(name,sex,age,idcard,address,phone,message,uid,email)
+        values(#{name},#{sex},#{age},#{idcard},#{address},#{phone},#{message},#{uid},#{email})
+    </insert>
+
+    <update id="update_address" parameterType="UserMessage">
+        update users set address=#{message} where uid = #{uid}
+    </update>
+    <update id="update_phone" parameterType="UserMessage">
+        update users set phone=#{message} where uid = #{uid}
+    </update>
+    <update id="update_mail" parameterType="UserMessage">
+        update users set email=#{message} where uid = #{uid}
+    </update>
+    <update id="update_message" parameterType="UserMessage">
+        update users set message=#{message} where uid = #{uid}
+    </update>
+
+    <update id="updateUserImg" parameterType="UserMessage">
+        update users set img=#{img} where uid=#{uid}
+    </update>
+</mapper>

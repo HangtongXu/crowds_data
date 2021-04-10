@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xht.mapper.MissionDetailsMapper">
+
+    <resultMap id="Details" type="com.xht.pojo.MissionDetails">
+        <result column="id" property="id" ></result>
+        <result column="mid" property="mid" ></result>
+        <result column="date" property="date"></result>
+        <result column="state" property="state"></result>
+        <result column="filePath" property="filePath"></result>
+        <association property="worker" javaType="com.xht.pojo.Worker">
+            <result column="wid" property="id"></result>
+            <result column="uid" property="uid"></result>
+            <result column="name" property="name"></result>
+            <result column="sex" property="sex"></result>
+            <result column="idcard" property="idcard"></result>
+            <result column="age" property="age"></result>
+            <result column="address" property="address"></result>
+            <result column="email" property="email"></result>
+            <result column="phone" property="phone"></result>
+            <result column="message" property="message"></result>
+            <result column="longtitude" property="longtitude"></result>
+            <result column="latitude" property="latitude"></result>
+            <result column="speed" property="speed"></result>
+            <result column="direction" property="direction"></result>
+            <result column="geohash" property="geohash"></result>
+            <result column="maxtask" property="maxtask"></result>
+            <result column="time" property="time"></result>
+        </association>
+    </resultMap>
+    <select id="getMissionDetailsById" parameterType="Integer" resultMap="Details">
+        select
+         m.id,m.mid,m.date,m.state,m.filePath,w.id as wid,w.uid,w.name,w.sex,w.idcard,w.age,w.address,w.email,w.phone,
+         w.message,w.longtitude,w.latitude,w.speed,w.direction,w.geohash,w.maxtask,w.time
+        from m_details as m left join worker as w on w.id = m.wid
+        where m.mid=#{id}
+    </select>
+
+    <insert id="addMissionDetails">
+        insert into m_details(mid,wid,state) values (#{mid},#{wid},1)
+    </insert>
+
+    <delete id="deleteMissionDetailsById" parameterType="Integer">
+        delete from m_details where mid=#{mid} and wid=#{wid}
+    </delete>
+
+    <update id="uploadMissionFile" >
+        update m_details set filePath=#{filePath} where mid=#{mid} and wid=#{wid}
+    </update>
+    <update id="updateMissionState" >
+        update m_details set state=#{state} where mid=#{mid} and wid=#{wid}
+    </update>
+
+    <select id="checkMissionContains" parameterType="Integer" resultType="Boolean">
+        select * from m_details where mid=#{mid}
+    </select>
+    <select id="checkMissionState" parameterType="Integer" resultType="Integer">
+        select count(*) from m_details where mid=#{mid} and state &lt;3
+    </select>
+    <update id="changeMissionDone" parameterType="Integer">
+        update mission set state=3 where id=#{mid}
+    </update>
+</mapper>

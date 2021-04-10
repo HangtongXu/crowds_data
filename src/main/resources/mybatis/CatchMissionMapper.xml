@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xht.mapper.CatchMissionMapper">
+    <resultMap id="Details" type="com.xht.pojo.MissionDetails">
+        <result column="id" property="id"></result>
+        <result column="mid" property="mid"></result>
+        <result column="date" property="date"></result>
+        <result column="state" property="state"></result>
+        <result column="filePath" property="filePath"></result>
+        <result column="wid" property="wid"></result>
+        <association property="mission" javaType="com.xht.pojo.Mission">
+            <result column="uid" property="uid"></result>
+            <result column="name" property="name"></result>
+            <result column="demand" property="demand"></result>
+            <result column="money" property="money"></result>
+            <result column="form" property="form"></result>
+            <result column="deadline" property="deadline"></result>
+            <result column="message" property="message"></result>
+            <result column="createtime" property="createtime"></result>
+            <result column="state" property="state"></result>
+            <result column="longtitude" property="longtitude"></result>
+            <result column="latitude" property="latitude"></result>
+            <result column="members" property="members"></result>
+            <result column="address" property="address"></result>
+        </association>
+    </resultMap>
+    <select id="getAvliableMission" resultType="Mission">
+        select * from mission where state &lt;2 and geohash like concat(#{geohash},'%') and members>0 and id not in (select mid from m_details where wid=#{wid})
+    </select>
+    <select id="getWaitDoneMission" resultMap="Details">
+        select
+         m.id,m.mid,m.date,m.state,m.wid,m.filePath,w.uid,w.name,w.address,w.message,w.longtitude,w.latitude,
+         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members
+        from m_details as m left join mission as w on w.id = m.mid
+        where m.wid=#{id} and m.state>3
+    </select>
+    <select id="getUnPayMission" resultMap="Details">
+        select
+         m.id,m.mid,m.date,m.wid,m.filePath,o.state,w.uid,w.name,w.address,w.message,w.longtitude,w.latitude,
+         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members
+        from m_details as m , mission as w ,orders as o
+        where m.wid=#{id} and m.state>1 and m.state &lt; 4 and o.uid=w.uid and o.wid=m.wid and w.id=m.mid
+    </select>
+    <select id="getDoneMission" resultMap="Details">
+        select
+         m.id,m.mid,m.date,m.state,m.wid,m.filePath,w.uid,w.name,w.address,w.message,w.longtitude,w.latitude,
+         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members
+        from m_details as m left join mission as w on w.id = m.mid
+        where m.wid=#{id} and m.state >= 4
+    </select>
+
+    <update id="catchMissionById" parameterType="Integer">
+        update mission set state = 2 where id=#{id}
+    </update>
+</mapper>
