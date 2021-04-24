@@ -29,6 +29,8 @@ public class Mission {
     private int members;
     private String geohash;
     private String address;
+    private int distribute;
+    private int auctionMembers;
 
 
 

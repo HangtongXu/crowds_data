@@ -18,5 +18,5 @@ public interface WorkerService {
     public int updateWorkerMaxTask(int wid);
     public Worker getWorkerByUId(int id);
 
-    public int updateWorkerLocation(int uid,float lng,float lat);
+    public int updateWorkerLocation(int uid,float lng,float lat,String geohash);
 }

@@ -4,14 +4,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xht.mapper.MissionMapper">
     <select id="getMission" parameterType="Integer" resultType="com.xht.pojo.Mission">
-        select * from mission where uid=#{uid}
+        select * from mission where uid=#{uid} and state &lt;2 and distribute =0  order by state desc
     </select>
     <select id="getMissionByState"  resultType="com.xht.pojo.Mission">
-        select * from mission where uid=#{uid} and state=#{state}
+        select * from mission where uid=#{uid} and state=#{state} and distribute =0
     </select>
 
     <select id="getMissionByGeoHash" parameterType="String" resultType="com.xht.pojo.Mission">
         select * from mission where geohash like concat(#{geohash},'%')
+    </select>
+
+    <select id="getAuctionMission" resultType="com.xht.pojo.Mission">
+         select * from mission where state &lt;2 and state >0 and geohash
+        like concat(#{geohash},'%') and members>0
+        and id not in (select mid from m_details where wid=#{wid}) and deadline > now() and distribute = 1
+        and id not in (select mid from worker_auction where wid=#{wid})
+    </select>
+
+    <select id="getOwnAuction" parameterType="int" resultType="com.xht.pojo.Mission">
+         select * from mission m where uid=#{uid} and distribute =1
     </select>
 
     <select id="getDistributeMission" resultType="com.xht.pojo.Mission">
@@ -19,8 +30,8 @@
     </select>
 
     <insert id="addMission" parameterType="Mission">
-        insert into mission(uid,name,demand,money,form,deadline,message,state,longtitude,latitude,members,geohash,address)
-        values(#{uid},#{name},#{demand},#{money},#{form},#{deadline},#{message},0,#{longtitude},#{latitude},#{members},#{geohash},#{address})
+        insert into mission(uid,name,demand,money,form,deadline,message,state,longtitude,latitude,members,geohash,address,distribute)
+        values(#{uid},#{name},#{demand},#{money},#{form},#{deadline},#{message},0,#{longtitude},#{latitude},#{members},#{geohash},#{address},#{distribute})
     </insert>
 
     <select id="getMissionById" parameterType="Integer" resultType="com.xht.pojo.Mission">
@@ -61,4 +72,8 @@
     <update id="updatepriority" parameterType="Integer" >
         update mission set priority=priority+1 where id=#{id}
     </update>
+
+    <select id="getAuctionMember" parameterType="Integer" resultType="Integer">
+        select count(*) from worker_auction where mid=#{mid}
+    </select>
 </mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xht.mapper.AuctionMapper">
+    <resultMap id="auction" type="com.xht.pojo.WorkerAuction">
+        <result column="id" property="id" ></result>
+        <result column="wid" property="wid"></result>
+        <result column="mid" property="mid"></result>
+        <result column="money" property="money"></result>
+        <result column="state" property="state"></result>
+        <association property="mission" javaType="com.xht.pojo.Mission">
+            <result column="uid" property="uid"></result>
+            <result column="name" property="name"></result>
+            <result column="demand" property="demand"></result>
+            <result column="money" property="money"></result>
+            <result column="form" property="form"></result>
+            <result column="deadline" property="deadline"></result>
+            <result column="message" property="message"></result>
+            <result column="createtime" property="createtime"></result>
+            <result column="state" property="state"></result>
+            <result column="longtitude" property="longtitude"></result>
+            <result column="latitude" property="latitude"></result>
+            <result column="members" property="members"></result>
+            <result column="address" property="address"></result>
+        </association>
+    </resultMap>
+    <select id="getWorkerAuction" resultMap="auction">
+        select
+         a.id,a.mid,a.wid,a.money,a.state,m.uid,m.name,m.address,m.message,m.longtitude,m.latitude,
+         m.demand,m.money,m.form,m.deadline,m.createtime,m.state,m.members
+         from worker_auction as a  left join mission as m on m.id=a.mid where wid=#{wid}
+    </select>
+    <insert id="addAuction" parameterType="com.xht.pojo.WorkerAuction">
+        insert into worker_auction (wid,mid,state,money) values (#{wid},#{mid},1,#{money});
+--         state: 1-工作者已出价  2-开始竞拍  3-竞拍成功  4-竞拍失败
+    </insert>
+
+    <update id="updateAuctionState" >
+        update worker_auction set state=#{state} where wid=#{wid} and mid=#{mid}
+    </update>
+    <update id="updateAuctionStateMission" >
+        update worker_auction set state=#{state} where mid=#{mid}
+    </update>
+    <update id="updateAuctionMission" >
+        update mission set state=#{state} where id=#{mid}
+    </update>
+
+    <select id="getAuctionByMissionId" parameterType="Integer">
+        select * from worker_auction where mid=#{mid}
+    </select>
+    <select id="getAuctionByWorkerId" parameterType="Integer">
+        select * from worker_auction where wid=#{wid} and state>=2
+    </select>
+    <select id="getAuctionById" parameterType="Integer">
+        select * from worker_auction where id=#{id}
+    </select>
+
+    <select id="getWaitAuctionMission" resultType="com.xht.pojo.Mission">
+        select * from mission where state=1 and distribute = 1 order by money desc;
+    </select>
+
+    <select id="getAuctionWorker" resultType="com.xht.pojo.WorkerAuction">
+        select * from worker_auction where mid=#{mid} and state=1 and money&lt;#{money} order by money;
+    </select>
+
+    <select id="checkAuctionWorker" resultType="Integer" >
+        select count(*) from worker_auction where mid=#{mid} and money&lt;#{money}
+    </select>
+
+    <update id="updateAuctionStateBatch" parameterType="java.util.LinkedList">
+        <foreach collection="list" index="index" item="mission" open="" close="" separator=";">
+            update mission set state = 2,money=#{mission.money} where id = #{mission.id}
+        </foreach>
+    </update>
+
+    <update id="updateWorkerAuction" parameterType="java.util.LinkedList">
+        <foreach collection="list" separator=";" close="" open="" item="auction" index="index">
+            update worker_auction set state=2,money =#{auction.money} where id=#{auction.id}
+        </foreach>
+    </update>
+
+    <update id="updateWorkerAuctionStateBatch" parameterType="java.util.Set">
+        <foreach collection="collection" separator=";" close="" open="" item="id" index="index">
+            update worker_auction set state=-1 where mid=#{id}
+        </foreach>
+    </update>
+
+    <select id="getAuctionByWidAndMid" resultType="com.xht.pojo.WorkerAuction">
+        select * from worker_auction where wid=#{wid} and mid=#{mid}
+    </select>
+</mapper>

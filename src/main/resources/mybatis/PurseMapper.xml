@@ -7,8 +7,8 @@
         select * from purse where uid=#{uid}
     </select>
 
-    <select id="checkMoney" resultType="Boolean">
-        select * from purse where uid=#{uid} and money > #{money}
+    <select id="checkMoney" resultType="int">
+        select count(*) from purse where uid=#{uid} and money > #{money}
     </select>
 
     <update id="pay">
@@ -18,7 +18,7 @@
         update purse set codes=codes+#{money} where uid=#{uid}
     </update>
 
-    <select id="checkPurseExist" parameterType="Integer" resultType="Boolean">
+    <select id="checkPurseExist" parameterType="Integer" resultType="Integer">
         select count(*) from purse where uid=#{uid}
     </select>
 

@@ -18,8 +18,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public int addUserMessage(UserMessage userMessage) {
-        return userMapper.addUserMessage(userMessage);
+    public int addUserMessage(UserMessage userMessage,int type) {
+        System.out.println(type);
+        switch (type){
+            case 0:
+                return userMapper.addUserMessage(userMessage);
+            case 1:
+                System.out.println(111);
+                return userMapper.addWorkerMessage(userMessage);
+            default:
+                return 0;
+        }
     }
 
     @Override
@@ -30,8 +39,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserMessage getUserMessage(int id) {
-        return userMapper.getUserMessage(id);
+    public UserMessage getUserMessage(UserInfo userInfo) {
+        switch (userInfo.getType()){
+            case 0:
+                return userMapper.getUserMessage(userInfo.getId());
+            case 1:
+                return userMapper.getWorkerMessage(userInfo.getId());
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -50,20 +66,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateUsermesage(UserMessage userMessage, int index) {
+    public int updateUsermesage(UserMessage userMessage, int index,UserInfo userInfo) {
         int back=0;
         switch (index){
             case 1:
-                back= userMapper.update_address(userMessage);
+                back= userInfo.getType()==0?userMapper.update_address(userMessage):userMapper.update_worker_address(userMessage);
                 break;
             case 2:
-                back= userMapper.update_mail(userMessage);
+                back= userInfo.getType()==0?userMapper.update_mail(userMessage):userMapper.update_worker_mail(userMessage);
                 break;
             case 3:
-                back= userMapper.update_phone(userMessage);
+                back= userInfo.getType()==0?userMapper.update_phone(userMessage):userMapper.update_worker_phone(userMessage);
                 break;
             case 4:
-                back= userMapper.update_message(userMessage);
+                back= userInfo.getType()==0?userMapper.update_message(userMessage):userMapper.update_worker_message(userMessage);
                 break;
             default:
                 back=0;
@@ -74,11 +90,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUserImg(int uid) {
-        return userMapper.getUserImg(uid);
+        int type=userMapper.getType(uid);
+        return type==0?userMapper.getUserImg(uid):userMapper.getWorkerImg(uid);
     }
 
     @Override
     public int updateUserImg(UserMessage userMessage) {
-        return userMapper.updateUserImg(userMessage);
+        int type=userMapper.getType(userMessage.getUid());
+//        System.out.println(userMessage);
+        return type==0?userMapper.updateUserImg(userMessage):userMapper.updateWorkerImg(userMessage);
     }
 }

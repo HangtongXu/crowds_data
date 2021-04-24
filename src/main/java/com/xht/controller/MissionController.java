@@ -81,4 +81,20 @@ public class MissionController {
         PageInfo<Mission> pageInfo=new PageInfo<>(missions);
         return pageInfo;
     }
+
+    @PostMapping("/getMission/auction")
+    public PageInfo<Mission> getOwnAuction(@RequestBody PageHelpers pageHelpers){
+        PageHelper.startPage(pageHelpers.getPageNum(),pageHelpers.getPageSize());
+        List<Mission> missions=missionService.getOwnAuction(pageHelpers.getId());
+//        System.out.println(pageHelpers);
+//        System.out.println(missions);
+        PageInfo<Mission> pageInfo=new PageInfo<>(missions);
+        return pageInfo;
+    }
+
+
+    @GetMapping("/getMission/auctionMember")
+    public int getAuctionMembers(int id){
+        return missionService.getAuctionMember(id);
+    }
 }

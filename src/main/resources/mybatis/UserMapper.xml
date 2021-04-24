@@ -6,6 +6,9 @@
     <select id="getUser" resultType="UserInfo" parameterType="String">
         select * from user where username=#{username};
     </select>
+    <select id="getType" resultType="Integer">
+        select type from user where id=#{uid}
+    </select>
 
     <select id="checkUsername" resultType="Integer" parameterType="String">
         select 1 from user where username=#{username} limit 1;
@@ -18,14 +21,24 @@
     <select id="getUserMessage" resultType="UserMessage" parameterType="Integer">
         select * from users where uid=#{id}
     </select>
+    <select id="getWorkerMessage" resultType="UserMessage" parameterType="Integer">
+        select * from worker where uid=#{id}
+    </select>
 
     <select id="getUserImg" parameterType="int">
         select img from users where uid=#{uid}
+    </select>
+    <select id="getWorkerImg" parameterType="int">
+        select img from worker where uid=#{uid}
     </select>
 
     <insert id="addUserMessage" parameterType="UserMessage">
         insert into users(name,sex,age,idcard,address,phone,message,uid,email)
         values(#{name},#{sex},#{age},#{idcard},#{address},#{phone},#{message},#{uid},#{email})
+    </insert>
+    <insert id="addWorkerMessage" parameterType="UserMessage">
+        insert into worker(name,sex,age,idcard,address,phone,message,uid,email,maxtask)
+        values(#{name},#{sex},#{age},#{idcard},#{address},#{phone},#{message},#{uid},#{email},4)
     </insert>
 
     <update id="update_address" parameterType="UserMessage">
@@ -43,5 +56,22 @@
 
     <update id="updateUserImg" parameterType="UserMessage">
         update users set img=#{img} where uid=#{uid}
+    </update>
+
+    <update id="update_worker_address" parameterType="UserMessage">
+        update worker set address=#{message} where uid = #{uid}
+    </update>
+    <update id="update_worker_phone" parameterType="UserMessage">
+        update worker set phone=#{message} where uid = #{uid}
+    </update>
+    <update id="update_worker_mail" parameterType="UserMessage">
+        update worker set email=#{message} where uid = #{uid}
+    </update>
+    <update id="update_worker_message" parameterType="UserMessage">
+        update worker set message=#{message} where uid = #{uid}
+    </update>
+
+    <update id="updateWorkerImg" parameterType="UserMessage">
+        update worker set img=#{img} where uid=#{uid}
     </update>
 </mapper>

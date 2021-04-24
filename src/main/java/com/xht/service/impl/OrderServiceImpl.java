@@ -20,6 +20,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public int addAuctionOrder(int wid, int uid, int money) {
+        return orderMapper.addAuctionOrder(wid,uid,money);
+    }
+
+    @Override
     public List<Order> getOrderByUid(int id) {
         return orderMapper.getOrderByUid(id);
     }

@@ -41,6 +41,9 @@
     <insert id="addMissionDetails">
         insert into m_details(mid,wid,state) values (#{mid},#{wid},1)
     </insert>
+    <insert id="addAuctionMissionDetails">
+        insert into m_details(mid,wid,state) values (#{mid},#{wid},2)
+    </insert>
 
     <delete id="deleteMissionDetailsById" parameterType="Integer">
         delete from m_details where mid=#{mid} and wid=#{wid}

@@ -25,6 +25,6 @@
     </select>
 
     <update id="updateWorkerLocation">
-        update worker set longtitude=#{lng},latitude=#{lat} where uid=#{uid}
+        update worker set longtitude=#{lng},latitude=#{lat},geohash=#{geohash} where uid=#{uid}
     </update>
 </mapper>

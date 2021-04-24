@@ -50,7 +50,7 @@ public class UserController {
             return "error";
         }
         userMessage.setUid(userService.getUser(userInfo.getUsername()).getId());
-        if(userService.addUserMessage(userMessage)>0){
+        if(userService.addUserMessage(userMessage,userInfos.get(userInfo.getUsername()).getType())>0){
             return "success";
         }
         else {
@@ -61,16 +61,18 @@ public class UserController {
 
     @RequestMapping(value = "/getUserInfo",method =RequestMethod.POST)
     public UserMessage getUserInfo(@RequestBody UserInfo userInfo){
-        int uid=userService.getUser(userInfo.getUsername()).getId();
-        UserMessage userMessage=userService.getUserMessage(uid);
+        UserInfo user=userService.getUser(userInfo.getUsername());
+        UserMessage userMessage=userService.getUserMessage(user);
         return userMessage;
     }
 
     @RequestMapping(value = "/updateUserMessage",method = RequestMethod.POST)
     public String updateUserMessage(@RequestBody UserMessage userMessage){
-        userMessage.setUid(userService.getUser(userMessage.getName()).getId());
-        System.out.println(userMessage.getUid());
-        int back=userService.updateUsermesage(userMessage,userMessage.getId());
+        UserInfo user=userService.getUser(userMessage.getName());
+        userMessage.setUid(user.getId());
+        int back=userService.updateUsermesage(userMessage,userMessage.getId(),user);
+        System.out.println(userMessage);
+        System.out.println(user.getType()==0?0:1);
         System.out.println(back);
         if(back>0){
             return "success";

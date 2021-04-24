@@ -12,6 +12,8 @@ public interface MissionDetailsService {
 
     public int addMissionDetails(int mid,int wid);
 
+    public int addAuctionMissionDetails(int mid,int wid);
+
     public int deleteMissionDetailsById(int mid,int wid);
 
     public int uploadMissionFile(String path,int mid,int wid);

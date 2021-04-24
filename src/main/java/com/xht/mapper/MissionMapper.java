@@ -1,6 +1,7 @@
 package com.xht.mapper;
 
 import com.xht.pojo.Mission;
+import com.xht.pojo.WorkerAuction;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -28,4 +29,11 @@ public interface MissionMapper {
     public int checkMissionState(@Param("id" ) int id);
 
     public int updatepriority(@Param("id") int id);
+
+    public List<WorkerAuction> getAuctionMission(@Param("geohash") String geohash,@Param("wid") int wid);
+
+    public List<Mission> getOwnAuction(@Param("uid") int uid);
+
+    public int getAuctionMember(@Param("mid") int mid);
 }
+

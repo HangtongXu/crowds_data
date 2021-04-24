@@ -9,6 +9,7 @@ import java.util.List;
 public interface OrderService {
 
     public int addOrder(int wid,int uid,int money);
+    public int addAuctionOrder(int wid,int uid,int money);
 
     public List<Order> getOrderByUid(int id);
 

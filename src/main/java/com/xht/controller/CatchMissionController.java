@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.sun.corba.se.spi.orbutil.threadpool.Work;
 import com.xht.pojo.*;
 import com.xht.service.*;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,8 @@ public class CatchMissionController {
     private OrderService orderService;
     @Autowired
     private MissionDetailsService missionDetailsService;
+    @Autowired
+    private AuctionService auctionService;
 
     @PostMapping("/getAvliableWork")
     public PageInfo<Mission> getAvliableMission(@RequestBody PageHelpers pageHelpers){
@@ -38,22 +41,41 @@ public class CatchMissionController {
     }
     @PostMapping("/getWaitDoneWork")
     public PageInfo<MissionDetails> getWaitDoneMission(@RequestBody PageHelpers pageHelpers){
+        Worker worker=workerService.getWorkerByUId(pageHelpers.getId());
         PageHelper.startPage(pageHelpers.getPageNum(),pageHelpers.getPageSize());
-        List<MissionDetails> missions=catchMissionService.getWaitDoneMission(pageHelpers.getId());
+        List<MissionDetails> missions=catchMissionService.getWaitDoneMission(worker.getId());
+        for(MissionDetails missionDetails:missions){
+            if(missionDetails.getMission().getDistribute()==1){
+                missionDetails.getMission().setMoney(auctionService.getAuctionByWidAndMid(missionDetails.getWid(),missionDetails.getMid()).getMoney());
+            }
+        }
         PageInfo<MissionDetails> pageInfo=new PageInfo<>(missions);
         return pageInfo;
     }
     @PostMapping("/getUnPayWork")
     public PageInfo<MissionDetails> getUnPayMission(@RequestBody PageHelpers pageHelpers){
+        System.out.println(pageHelpers);
+        Worker worker=workerService.getWorkerByUId(pageHelpers.getId());
         PageHelper.startPage(pageHelpers.getPageNum(),pageHelpers.getPageSize());
-        List<MissionDetails> missions=catchMissionService.getUnPayMission(pageHelpers.getId());
+        List<MissionDetails> missions=catchMissionService.getUnPayMission(worker.getId());
+        for(MissionDetails missionDetails:missions){
+            if(missionDetails.getMission().getDistribute()==1){
+                missionDetails.getMission().setMoney(auctionService.getAuctionByWidAndMid(missionDetails.getWid(),missionDetails.getMid()).getMoney());
+            }
+        }
         PageInfo<MissionDetails> pageInfo=new PageInfo<>(missions);
         return pageInfo;
     }
     @PostMapping("/getDoneWork")
     public PageInfo<MissionDetails> getDoneMission(@RequestBody PageHelpers pageHelpers){
+        Worker worker=workerService.getWorkerByUId(pageHelpers.getId());
         PageHelper.startPage(pageHelpers.getPageNum(),pageHelpers.getPageSize());
-        List<MissionDetails> missions=catchMissionService.getDoneMission(pageHelpers.getId());
+        List<MissionDetails> missions=catchMissionService.getDoneMission(worker.getId());
+        for(MissionDetails missionDetails:missions){
+            if(missionDetails.getMission().getDistribute()==1){
+                missionDetails.getMission().setMoney(auctionService.getAuctionByWidAndMid(missionDetails.getWid(),missionDetails.getMid()).getMoney());
+            }
+        }
         PageInfo<MissionDetails> pageInfo=new PageInfo<>(missions);
         return pageInfo;
     }

@@ -1,9 +1,6 @@
 package com.xht.controller;
 
-import com.xht.pojo.Mission;
-import com.xht.pojo.MissionDetails;
-import com.xht.pojo.UserMessage;
-import com.xht.pojo.Worker;
+import com.xht.pojo.*;
 import com.xht.service.MissionDetailsService;
 import com.xht.service.UserService;
 import com.xht.utils.FileZips;
@@ -52,7 +49,6 @@ public class FileController {
         }
         String filename = "/user-img/" + fileName;
         userMessage.setImg(filename);
-        System.out.println(userMessage);
         userService.updateUserImg(userMessage);
         return filename;
     }

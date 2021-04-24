@@ -4,6 +4,7 @@ import ch.hsr.geohash.GeoHash;
 import com.xht.mapper.MissionMapper;
 import com.xht.pojo.Mission;
 import com.xht.pojo.Worker;
+import com.xht.pojo.WorkerAuction;
 import com.xht.service.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,6 +102,21 @@ public class MissionServiceImpl implements MissionService {
     @Override
     public int updatepriority(int id) {
         return missionMapper.updatepriority(id);
+    }
+
+    @Override
+    public List<WorkerAuction> getAuctionMission(String geohash,int wid) {
+        return missionMapper.getAuctionMission(geohash,wid);
+    }
+
+    @Override
+    public List<Mission> getOwnAuction(int uid) {
+        return missionMapper.getOwnAuction(uid);
+    }
+
+    @Override
+    public int getAuctionMember(int mid) {
+        return missionMapper.getAuctionMember(mid);
     }
 
 }

@@ -3,6 +3,8 @@ package com.xht.service;
 import com.xht.mapper.MissionMapper;
 import com.xht.pojo.Mission;
 import com.xht.pojo.Worker;
+import com.xht.pojo.WorkerAuction;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,4 +28,12 @@ public interface MissionService {
     public Mission getMissionById(int id);
 
     public int updatepriority(int id);
+
+    public List<WorkerAuction> getAuctionMission(String geohash,int wid);
+
+    public List<Mission> getOwnAuction(int uid);
+
+    public int getAuctionMember(int mid);
+
+
 }

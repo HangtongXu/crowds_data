@@ -47,7 +47,7 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public int updateWorkerLocation(int uid, float lng, float lat) {
-        return workerMapper.updateWorkerLocation(uid,lng,lat);
+    public int updateWorkerLocation(int uid, float lng, float lat,String geohash) {
+        return workerMapper.updateWorkerLocation(uid,lng,lat,geohash);
     }
 }

@@ -15,5 +15,5 @@ public interface WorkerMapper {
     public int updateWorkerMaxTaskById(List<Worker> workers);
     public int updateWorkerMaxTask(@Param("wid") int wid);
     public Worker getWorkerByUId(@Param("id") int id);
-    public int updateWorkerLocation(@Param("uid")int uid,@Param("lng")float lng,@Param("lat")float lat);
+    public int updateWorkerLocation(@Param("uid")int uid,@Param("lng")float lng,@Param("lat")float lat,@Param("geohash")String geohash);
 }

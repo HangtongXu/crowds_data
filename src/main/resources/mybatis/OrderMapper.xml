@@ -16,7 +16,9 @@
     <insert id="addOrder" >
         insert into orders(wid,uid,money,state,details) values (#{wid},#{uid},#{money},1,0)
     </insert>
-
+    <insert id="addAuctionOrder" >
+        insert into orders(wid,uid,money,state,details) values (#{wid},#{uid},#{money},1,1)
+    </insert>
     <select id="getOrderByUid" resultMap="orderMap">
         select o.id,o.uid,o.wid,o.money,o.state,o.date,o.details,w.name
         from orders as o left join worker w on w.id=o.wid

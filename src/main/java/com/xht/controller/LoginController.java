@@ -1,5 +1,6 @@
 package com.xht.controller;
 
+import ch.hsr.geohash.GeoHash;
 import com.xht.pojo.UserInfo;
 import com.xht.service.UserService;
 import com.xht.service.WorkerService;
@@ -35,7 +36,9 @@ public class LoginController {
     @GetMapping("/updateUserLocation")
     @ResponseBody
     public void updateUserLocation(@RequestParam("uid")int uid,@RequestParam("lng")float lng,@RequestParam("lat")float lat){
-        workerService.updateWorkerLocation(uid,lng,lat);
+        GeoHash geoHash=GeoHash.withCharacterPrecision(lat,lng,5);
+        System.out.println(geoHash.toBase32());
+        workerService.updateWorkerLocation(uid,lng,lat,geoHash.toBase32());
         System.out.println("位置已更新");
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 @Mapper
 public interface OrderMapper {
     public int addOrder(@Param("wid") int wid, @Param("uid")int uid,@Param("money") int money);
+    public int addAuctionOrder(@Param("wid") int wid, @Param("uid")int uid,@Param("money") int money);
 
     public List<Order> getOrderByUid(@Param("id") int id);
 

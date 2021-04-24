@@ -5,6 +5,7 @@ import com.xht.pojo.Order;
 import com.xht.pojo.Worker;
 import com.xht.service.*;
 import com.xht.utils.AlgorithmOptimalSet;
+import com.xht.utils.AuctionDistribute;
 import com.xht.utils.TaskDistribution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,10 +26,25 @@ public class DistributeServiceImpl implements DistributeService {
     OrderService orderService;
     @Autowired
     MissionDetailsService missionDetailsService;
+    @Autowired
+    AuctionDistribute auctionDistribute;
+    @Override
+    @Scheduled(fixedRate = 600000)
+    public void auctionDistribute() {
+        auctionDistribute.decideAskerPrice();
+        if(auctionDistribute.getAuctionMisssions().isEmpty()){
+            System.out.println("本批次无符合条件任务");
+            return;
+        }
+        System.out.println("本批次符合条件任务数量："+auctionDistribute.getAuctionMisssions().size());
+        auctionDistribute.decideWorkerPrice();
+        auctionDistribute.updateState();
+        System.out.println("本批次处理结束");
+    }
 
-//    @PostConstruct
-    @Scheduled(fixedRate = 10000)
-    public void init() {
+    //    @PostConstruct
+//    @Scheduled(fixedRate = 10000)
+    public void normalDistribute() {
         while (true) {
             List<Mission> missions = missionService.getDistributeMission();
             if (missions.size() < 1) {

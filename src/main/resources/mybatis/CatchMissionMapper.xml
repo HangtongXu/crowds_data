@@ -24,29 +24,31 @@
             <result column="latitude" property="latitude"></result>
             <result column="members" property="members"></result>
             <result column="address" property="address"></result>
+            <result column="distribute" property="distribute"></result>
         </association>
     </resultMap>
     <select id="getAvliableMission" resultType="Mission">
-        select * from mission where state &lt;2 and geohash like concat(#{geohash},'%') and members>0 and id not in (select mid from m_details where wid=#{wid})
+        select * from mission where state &lt;2 and geohash
+        like concat(#{geohash},'%') and members>0 and id not in (select mid from m_details where wid=#{wid}) and deadline > now() and distribute =0
     </select>
     <select id="getWaitDoneMission" resultMap="Details">
         select
          m.id,m.mid,m.date,m.state,m.wid,m.filePath,w.uid,w.name,w.address,w.message,w.longtitude,w.latitude,
-         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members
+         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members,w.distribute
         from m_details as m left join mission as w on w.id = m.mid
-        where m.wid=#{id} and m.state>3
+        where m.wid=#{id} and m.state = 1
     </select>
     <select id="getUnPayMission" resultMap="Details">
         select
-         m.id,m.mid,m.date,m.wid,m.filePath,o.state,w.uid,w.name,w.address,w.message,w.longtitude,w.latitude,
-         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members
+         m.id,m.mid,m.date,m.wid,m.filePath,m.state,w.uid,w.name,w.address,w.message,w.longtitude,w.latitude,
+         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members,w.distribute
         from m_details as m , mission as w ,orders as o
         where m.wid=#{id} and m.state>1 and m.state &lt; 4 and o.uid=w.uid and o.wid=m.wid and w.id=m.mid
     </select>
     <select id="getDoneMission" resultMap="Details">
         select
          m.id,m.mid,m.date,m.state,m.wid,m.filePath,w.uid,w.name,w.address,w.message,w.longtitude,w.latitude,
-         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members
+         w.demand,w.money,w.form,w.deadline,w.createtime,w.state,w.members,w.distribute
         from m_details as m left join mission as w on w.id = m.mid
         where m.wid=#{id} and m.state >= 4
     </select>

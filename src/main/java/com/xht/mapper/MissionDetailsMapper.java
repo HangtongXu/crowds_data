@@ -12,6 +12,8 @@ public interface MissionDetailsMapper {
 
     public int addMissionDetails(@Param("mid") int mid,@Param("wid") int wid);
 
+    public int addAuctionMissionDetails(@Param("mid") int mid,@Param("wid") int wid);
+
     public int deleteMissionDetailsById(@Param("mid") int mid,@Param("wid") int wid);
 
     public int uploadMissionFile(@Param("filePath")String filePath,@Param("mid")int mid,@Param("wid")int wid);

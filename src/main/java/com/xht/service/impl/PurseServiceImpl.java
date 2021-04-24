@@ -21,7 +21,10 @@ public class PurseServiceImpl implements PurseService
 
     @Override
     public boolean checkMoney(int uid, int money) {
-        return purseMapper.checkMoney(uid,money);
+        if(purseMapper.checkPurseExist(uid)<1){
+            purseMapper.createPurse(uid);
+        }
+        return purseMapper.checkMoney(uid,money)>0;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class PurseServiceImpl implements PurseService
 
     @Override
     public int earn(int uid, int money) {
-        if(!purseMapper.checkPurseExist(uid)){
+        if(purseMapper.checkPurseExist(uid)<1){
             purseMapper.createPurse(uid);
         }
         return purseMapper.earn(uid,money);
